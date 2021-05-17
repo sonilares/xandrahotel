@@ -1,0 +1,69 @@
+﻿
+
+@model HMS1.Areas.Dashboard.Models.ViewModel.AccomodationPackageActionModel
+
+
+@if (Model != null)
+{
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+
+                <span> Delete Accomodation Package</span>
+
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+
+            <form id="actionForm">
+               <input type="hidden" name="ID" value="@Model.ID" /> 
+            </form>
+            <div class="alert alert-danger" role="alert">
+                Are you sure you want to delete this Accomodation Package?
+            </div>
+
+
+
+
+        </div>
+        <div class="modal-footer">
+            <button id="actionButton" type="button" class="btn btn-danger"> <i class="far fa-trash-alt"></i> Delete</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+        </div>
+    </div>
+
+
+}
+
+<script>
+    $("#actionButton").click(function () {
+        var name = $("#name").val();
+        var NoOfRoom = $("#NoOfRoom").val();
+        var FeePerNight = $("#FeePerNight").val();
+        var AccomodationTypeId = $("#AccomodationTypeId").val();
+
+        $.ajax({
+            url: '@Url.Action("Delete","AccomodationPackage")',
+            type: "post",
+            // data: $("#actionForm").serialize
+            data: { AccomodationTypeId: AccomodationTypeId, Name: name, NoOfRoom: NoOfRoom, FeePerNight: FeePerNight },
+        })
+        .done(function (response) {
+
+            if (response.Success)
+            {
+               window.location.href = "@Url.Action("Index", "AccomodationPackage")";
+            }
+            else {
+                $(".errorDiv").html(response.Message)
+
+            }
+        });
+
+    })
+
+</script>

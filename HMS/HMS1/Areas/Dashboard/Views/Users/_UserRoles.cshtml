@@ -1,0 +1,151 @@
+﻿@model HMS1.Areas.Dashboard.Models.ViewModel.UsersRoleModel
+
+
+@if (Model != null)
+{
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+
+                    <span> Edit Role </span>
+             
+                
+
+
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            
+            @if (Model.UserRoles != null && Model.UserRoles.Count() > 0)
+            {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                           Current User Roles
+                        </th>
+                        
+
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @foreach (var role in Model.UserRoles)
+                    {
+                        <tr>
+                            <td>
+                                @role.Name
+                            </td>
+                            <td>
+                                <button t data-href="@Url.Action("UserRoleOperation", "Users", new { userId = Model.userId, roleID = role.Id , isDelete = true})" class="btnRole btn btn-danger" 
+                                        >  <i class="fas fa-user-times mr-1"></i> Delete  </button>
+                            </td>
+                            <td>
+                              
+                            </td>
+
+                        </tr>
+
+                    }
+
+                </tbody>
+
+            </table>
+            }
+            else
+            {
+
+                <div class="alert alert-warning" role="alert">
+                    This User has no Roles!
+                </div>
+            }
+            <hr />
+           
+            @if (Model.Roles != null && Model.Roles.Count() > 0)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="2">
+                                Assign New Roles
+                            </th>
+                            
+
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        @foreach (var role in Model.Roles)
+                    {
+                            <tr>
+                                <td>
+                                    @role.Name
+                                </td>
+                                <td>
+                                    <button t data-href="@Url.Action("UserRoleOperation", "Users", new { userId = Model.userId, roleID = role.Id , isDelete = false})" class="btnRole btn btn-success" > 
+                                     <i class="fas fa-user-check mr-1"></i>  Assign  </button>
+                                </td>
+                                <td></td>
+
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+            }
+            else
+            {
+                
+                <div class="alert alert-warning" role="alert">
+                    Create Role for this users!
+                </div>
+            }
+
+        </div>
+        <div class="modal-footer">
+           
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"></i> Close </button>
+
+        </div>
+    </div>
+
+
+}
+
+<script>
+    $(".btnRole").click(function () {
+        $.ajax({
+            url: $(this).attr("data-href"),
+            type: "POST"
+
+        })
+        .done(function (response) {
+
+            if (response.Success)
+            {
+                $.ajax({
+                    url: "@Url.Action("UserRoles","Users", new { ID =  Model.userId})",
+
+                })
+                 .done(function (response) {
+
+                 $("#actionModal .modal-dialog").html(response);
+       });
+
+            }
+            else {
+
+                alert(response.Message);
+            }
+        });
+
+    });
+
+</script>
+
+

@@ -1,0 +1,71 @@
+﻿
+
+@model HMS1.Areas.Dashboard.Models.ViewModel.UsersActionModel
+
+
+@if (Model != null)
+{
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+
+                <span> Delete User </span>
+
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+
+            <form id="actionForm">
+               <input type="hidden" name="ID" value="@Model.ID" /> 
+            </form>
+            <div class="alert alert-danger" role="alert">
+                Are you sure you want to delete User ?
+            </div>
+
+
+
+
+        </div>
+        <div class="modal-footer">
+            <button id="actionButton" type="button" class="btn btn-danger"> <i class="far fa-trash-alt"></i> Delete</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+        </div>
+    </div>
+
+
+}
+
+<script>
+    $("#actionButton").click(function () {
+        var FullName = $("#FullName").val();
+        var Email = $("#Email").val();
+        var UserName = $("#UserName").val();
+        var Address = $("#Address").val();
+        var City = $("#city").val();
+        var Country = $("#country").val();
+
+        $.ajax({
+            url: '@Url.Action("Delete","Users")',
+            type: "post",
+            // data: $("#actionForm").serialize
+            data: { FullName: FullName, Email: Email, UserName: UserName, Address: Address, City: City, Country: Country },
+        })
+        .done(function (response) {
+
+            if (response.Success)
+            {
+               window.location.href = "@Url.Action("Index", "Users")";
+            }
+            else {
+                $(".errorDiv").html(response.Message)
+
+            }
+        });
+
+    })
+
+</script>
